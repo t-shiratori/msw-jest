@@ -3,18 +3,6 @@ import { matchRequestUrl, MockedRequest } from 'msw';
 
 server.printHandlers();
 
-server.events.on('request:start', (req) => {
-  console.log('request:start req: ', req);
-});
-
-server.events.on('request:match', (req) => {
-  console.log('request:match req: ', req);
-});
-
-server.events.on('request:unhandled', (req) => {
-  console.log('request:unhandled req: ', req);
-});
-
 // Establish API mocking before all tests.
 beforeAll(() => server.listen());
 

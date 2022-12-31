@@ -1,11 +1,44 @@
-import fetch from 'cross-fetch';
+import 'cross-fetch/polyfill';
+import { rest } from 'msw';
+import { CustomError, fetcher } from '../fetcher';
+import { server } from '../mocks/server';
 
-test('fetch', async () => {
-  const response = await fetch('https://api.backend.dev/user');
+const ORIGIN = 'https://api.backend.dev';
 
-  console.log('response: ', response);
+describe('fetcher', () => {
+  describe('Get', () => {
+    describe('Success', () => {
+      test('200', async () => {
+        const expectedValue = { title: 'A Game of Thrones' };
 
-  const jsonData = await response.json();
+        server.use(
+          rest.get(`${ORIGIN}/book/:bookId`, (_, res, ctx) => {
+            return res(ctx.json(expectedValue));
+          })
+        );
 
-  console.log('jsonData: ', jsonData);
+        const response = await fetcher({ url: `${ORIGIN}/book/1` });
+
+        expect(response).toEqual(expectedValue);
+      });
+    });
+
+    describe('Fail', () => {
+      test.each`
+        status
+        ${`401`}
+        ${`403`}
+        ${`500`}
+      `('$status', async ({ status }) => {
+        server.use(
+          rest.get(`${ORIGIN}/book/:bookId`, (req, res, ctx) => {
+            return res(ctx.status(status));
+          })
+        );
+        await expect(fetcher({ url: `${ORIGIN}/book/1` })).rejects.toThrowError(
+          new CustomError()
+        );
+      });
+    });
+  });
 });
