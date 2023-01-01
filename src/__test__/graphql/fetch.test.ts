@@ -5,33 +5,33 @@ import { CustomError, fetcher } from '../../fetcher';
 import { server } from '../../mocks/server';
 
 describe('fetcher', () => {
-  describe('Get', () => {
-    describe('Success', () => {
-      test('200', async () => {
-        const expectedValue = {
-          user: {
-            id: 0,
-            name: 'name1',
-          },
-        };
+  describe('GetUserInfo', () => {
+    test('200', async () => {
+      const expectedValue = {
+        user: {
+          id: 0,
+          name: 'name1',
+        },
+      };
 
-        const reqBody = {
-          query: `query GetUserInfo {
-          user
-        }`,
-        };
+      const reqBody = {
+        query: `query GetUserInfo {
+        user
+      }`,
+      };
 
-        const response = await fetcher({
-          url: `${ORIGIN}`,
-          method: 'POST',
-          reqBody,
-        });
-
-        console.log('response: ', response);
-
-        expect(response.data).toEqual(expectedValue);
+      const response = await fetcher({
+        url: `${ORIGIN}`,
+        method: 'POST',
+        reqBody,
       });
 
+      expect(response.data).toEqual(expectedValue);
+    });
+  });
+
+  describe('GetBookInfo', () => {
+    describe('Success', () => {
       test('200', async () => {
         const expectedValue = {
           book: {

@@ -5,46 +5,50 @@ import { CustomError, fetcher } from '../../fetcher';
 import { server } from '../../mocks/server';
 
 describe('fetcher', () => {
-  describe('Get', () => {
-    describe('Success', () => {
-      test('200', async () => {
-        const expectedValue = { username: 'admin' };
+  describe('endpoint /user', () => {
+    test('user: 200', async () => {
+      const expectedValue = { username: 'admin' };
 
-        const response = await fetcher({ url: `${ORIGIN}/user` });
+      const response = await fetcher({ url: `${ORIGIN}/user` });
 
-        expect(response).toEqual(expectedValue);
-      });
-
-      test('200', async () => {
-        const expectedValue = { title: 'A Game of Thrones' };
-
-        server.use(
-          rest.get(`${ORIGIN}/book/:bookId`, (_, res, ctx) => {
-            return res(ctx.json(expectedValue));
-          })
-        );
-
-        const response = await fetcher({ url: `${ORIGIN}/book/1` });
-
-        expect(response).toEqual(expectedValue);
-      });
+      expect(response).toEqual(expectedValue);
     });
+  });
 
-    describe('Fail', () => {
-      test.each`
-        status
-        ${`401`}
-        ${`403`}
-        ${`500`}
-      `('$status', async ({ status }) => {
-        server.use(
-          rest.get(`${ORIGIN}/book/:bookId`, (req, res, ctx) => {
-            return res(ctx.status(status));
-          })
-        );
-        await expect(fetcher({ url: `${ORIGIN}/book/1` })).rejects.toThrowError(
-          new CustomError()
-        );
+  describe('endpoint /book', () => {
+    describe('Get', () => {
+      describe('Success', () => {
+        test('book: 200', async () => {
+          const expectedValue = { title: 'A Game of Thrones' };
+
+          server.use(
+            rest.get(`${ORIGIN}/book/:bookId`, (_, res, ctx) => {
+              return res(ctx.json(expectedValue));
+            })
+          );
+
+          const response = await fetcher({ url: `${ORIGIN}/book/1` });
+
+          expect(response).toEqual(expectedValue);
+        });
+      });
+
+      describe('Fail', () => {
+        test.each`
+          status
+          ${`401`}
+          ${`403`}
+          ${`500`}
+        `('book: $status', async ({ status }) => {
+          server.use(
+            rest.get(`${ORIGIN}/book/:bookId`, (req, res, ctx) => {
+              return res(ctx.status(status));
+            })
+          );
+          await expect(
+            fetcher({ url: `${ORIGIN}/book/1` })
+          ).rejects.toThrowError(new CustomError());
+        });
       });
     });
   });
