@@ -1,5 +1,4 @@
 import { server } from './src/mocks/server';
-import { matchRequestUrl, MockedRequest } from 'msw';
 
 server.printHandlers();
 
