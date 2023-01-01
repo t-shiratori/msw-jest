@@ -1,7 +1,7 @@
 import 'cross-fetch/polyfill';
 import { rest } from 'msw';
+import { ORIGIN } from '../const';
 import { CustomError, fetcher } from '../fetcher';
-import { ORIGIN } from '../mocks/handlers';
 import { server } from '../mocks/server';
 
 describe('fetcher', () => {

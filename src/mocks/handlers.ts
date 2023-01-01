@@ -1,7 +1,6 @@
 // src/mocks/handlers.js
 import { rest } from 'msw';
-
-export const ORIGIN = 'https://api.backend.dev';
+import { ORIGIN } from '../const';
 
 export const handlers = [
   // NOT "/user", nothing to be relative to!
