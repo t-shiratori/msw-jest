@@ -1,12 +1,20 @@
 import 'cross-fetch/polyfill';
 import { rest } from 'msw';
-import { ORIGIN } from '../const';
-import { CustomError, fetcher } from '../fetcher';
-import { server } from '../mocks/server';
+import { ORIGIN } from '../../const';
+import { CustomError, fetcher } from '../../fetcher';
+import { server } from '../../mocks/server';
 
 describe('fetcher', () => {
   describe('Get', () => {
     describe('Success', () => {
+      test('200', async () => {
+        const expectedValue = { username: 'admin' };
+
+        const response = await fetcher({ url: `${ORIGIN}/user` });
+
+        expect(response).toEqual(expectedValue);
+      });
+
       test('200', async () => {
         const expectedValue = { title: 'A Game of Thrones' };
 
