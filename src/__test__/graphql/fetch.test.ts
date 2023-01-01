@@ -1,5 +1,5 @@
 import 'cross-fetch/polyfill';
-import { graphql, rest } from 'msw';
+import { graphql } from 'msw';
 import { ORIGIN } from '../../const';
 import { CustomError, fetcher } from '../../fetcher';
 import { server } from '../../mocks/server';
