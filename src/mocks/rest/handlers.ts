@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { ORIGIN } from '../const';
+import { ORIGIN } from '../../const';
 
 export const handlers = [
   rest.post(`${ORIGIN}/login`, (req, res, ctx) => {
